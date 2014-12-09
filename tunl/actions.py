@@ -66,7 +66,7 @@ def do_add(nick='', data={}, api=False, force=False):
         print config
     return config
 
-def do_start(nick):
+def do_start(nick, api=False):
     """ """
     config = load_config()
     tunnel = get_tunnel(nick)
@@ -74,7 +74,7 @@ def do_start(nick):
     socket_file = get_socket(nick)
     if ope(socket_file):
         report.start("socket already exists")
-        return
+        return False
     connect_cmd_t = 'ssh -M -S {0} -fnNT -L {1}:localhost:{2} {3}@{4}'
     user = get_user(tunnel)
     connect_cmd = connect_cmd_t.format(
@@ -83,9 +83,9 @@ def do_start(nick):
         tunnel['remote_host'])
     report(connect_cmd)
     print qlocal(connect_cmd)
+    return True
 
-
-def do_stop(nick):
+def do_stop(nick, api=False):
     """ stops the tunnel created by do_start() """
     config = load_config()
     tunnel = get_tunnel(nick)
@@ -93,8 +93,9 @@ def do_stop(nick):
     socket_file = get_socket(nick)
     if not ope(socket_file):
         report("no socket file found.  probably the tunnel is down already")
-        return
+        return False
     shutdown_cmd_t = 'ssh -S {0} -O exit {1}'
     shutdown_cmd = shutdown_cmd_t.format(socket_file, tunnel_user)
-    #qlocal(shutdown_cmd)
     report(shutdown_cmd)
+    qlocal(shutdown_cmd)
+    return True

@@ -1,0 +1,10 @@
+*.pyc
+node/*
+*/*.egg-info/*
+#*
+*#
+.tox/*
+build
+*.egg-info
+dist
+venv_*/*

@@ -2,7 +2,7 @@
 """
 import demjson
 
-from .util import report, require_tunnel, load_config, qlocal
+from .util import report, require_tunnel, load_config, qlocal, die
 from .data import TUNL_DIR, SYSTEM_USER, TUNL_CONFIG
 from .python import opj, ope
 from .schema import Entry
@@ -68,7 +68,6 @@ def do_add(nick='', data={}, api=False, force=False):
 
 def do_start(nick, api=False):
     """ """
-    config = load_config()
     tunnel = get_tunnel(nick)
     report.start(nick)
     socket_file = get_socket(nick)
@@ -87,7 +86,6 @@ def do_start(nick, api=False):
 
 def do_stop(nick, api=False):
     """ stops the tunnel created by do_start() """
-    config = load_config()
     tunnel = get_tunnel(nick)
     tunnel_user = get_user(tunnel)
     socket_file = get_socket(nick)

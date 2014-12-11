@@ -1,16 +1,16 @@
 """ tunl
 """
 import os, sys
-import argparse
 
+import argparse
 import demjson
-from fabric.api import quiet, local
+
 from .version import __version__
 from .schema import TunlSchema
 from .util import report, die, require_tunnel, load_config
 from .parsing import parse_argv, get_parser
 from .data import HOME,TUNL_DIR, TUNL_CONFIG,VERBOSE
-from .python import ope, opj
+from .python import ope, opj, mkdir
 
 def ensure_config():
     if not ope(TUNL_DIR):

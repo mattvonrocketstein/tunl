@@ -1,7 +1,6 @@
-"""
+""" tunl.util
 """
 import demjson
-from fabric.api import quiet, local
 
 from report import Reporter
 from .data import TUNL_CONFIG
@@ -23,6 +22,11 @@ def require_tunnel(config, nick):
         err = err.format(nick, config.keys())
         die(err)
 
-def qlocal(*args, **kargs):
-    with quiet():
-        return local(*args, **kargs)
+#def qlocal(*args, **kargs):
+#    from fabric.api import quiet, local
+#    with quiet():
+#        return local(*args, **kargs)
+
+def qlocal(cmd):
+    import os
+    os.system(cmd)

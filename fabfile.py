@@ -3,31 +3,36 @@
 # fabfile for pkg_name
 #
 # this file is a self-hosting fabfile, meaning it
-# supports standard option parsing, including
-# --help and -l (for listing commands).
+# supports direct invocation with standard option
+# parsing, including --help and -l (for listing commands).
 #
 # summary of commands/arguments:
 #
-#   * foo: bar, baz, qux
+#   * fab pypi_repackage: update this package on pypi
 #
-import os, re, sys
-
-from fabric.api import env, run
+import os
+import sys
 from fabric.colors import red
-from fabric.api import lcd, local, quiet
+from fabric.api import lcd, local
 from fabric.contrib.console import confirm
 
 _ope = os.path.exists
 _mkdir = os.mkdir
 _expanduser = os.path.expanduser
+_dirname = os.path.dirname
 
-def repackage():
-    local('python setup.py develop')
-    ans=confirm('proceed with pypi?')
-    if ans:
-        #with quiet():
-        local('python setup.py register -r pypi')
-        local('python setup.py sdist upload -r pypi')
+def pypi_repackage():
+    ldir = _dirname(__file__)
+    print red("warning:") + (" by now you should have commited local"
+                             " master and bumped version string")
+    ans = confirm('proceed with pypi update in "{0}"?'.format(ldir))
+    if not ans: return
+    with lcd(ldir):
+        local("git checkout -b pypi") # in case this has never been done before
+        local("git checkout pypi")
+        local("git reset --hard master")
+        local("python setup.py register -r pypi")
+        local("python setup.py sdist upload -r pypi")
 
 if __name__ == '__main__':
     # a neat hack that makes this file a "self-hosting" fabfile,
@@ -39,7 +44,6 @@ if __name__ == '__main__':
     #
     # the .index() manipulation below should make this work regardless of
     # whether this is invoked from shell as "./foo.py" or "python foo.py"
-    import sys
     from fabric.main import main as fmain
     patched_argv = ['fab', '-f', __file__,] + \
                    sys.argv[sys.argv.index(__file__)+1:]

@@ -18,6 +18,17 @@ from version import __version__
 sys.path.pop()
 
 base_url = 'https://github.com/mattvonrocketstein/tunl/'
+
+install_requires = [
+    'argparse',
+    'demjson',
+    'voluptuous',
+    'reporting>=0.31',
+    # i hate you setup.py
+    # this is already specified by reporting.
+    # why do i have to write it again here??
+    'pygments', ]
+
 setup(
     name         = 'tunl',
     version      = __version__,
@@ -31,11 +42,4 @@ setup(
     entry_points = {
         'console_scripts': \
         ['tunl = tunl.bin._tunl:main', ] },
-    install_requires = [
-        'argparse',
-        'demjson',
-        'fabric',
-        'voluptuous',
-        #'goulash',
-        ],
-    )
+    install_requires = install_requires,)

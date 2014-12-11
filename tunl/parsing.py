@@ -1,10 +1,9 @@
-"""tunl.parsing
+""" tunl.parsing
 """
 import sys
 import argparse
 
 from .util import report, die
-from .util import load_config
 from .actions import do_list, do_start, do_stop, do_add, do_status
 
 def get_parser():
@@ -20,7 +19,6 @@ def get_parser():
 def parse_argv():
     parser = get_parser()
     args, unknown = parser.parse_known_args(sys.argv[1:])
-    config = load_config()
     if len(vars(args)):
         report("parsed argv: "+str([args,unknown]))
 

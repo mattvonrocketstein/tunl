@@ -1,8 +1,9 @@
 """ tunl.parsing
 """
-import sys
+import os, sys
 import argparse
 
+from .data import TUNL_CONFIG
 from .util import report, die
 from .actions import do_list, do_start, do_stop, do_add, do_status
 
@@ -11,6 +12,7 @@ def get_parser():
     parser.add_argument('-l', '--list', action="store_true", default=False)
     parser.add_argument('-v', '--verbose', action="store_true", default=False)
     parser.add_argument('--start', action="store_true", default=False)
+    parser.add_argument('--edit', action="store_true", default=False)
     parser.add_argument('--add', default="")
     parser.add_argument('--stop', action="store_true", default=False)
     parser.add_argument('--status', action="store_true", default=False)
@@ -42,6 +44,12 @@ def parse_argv():
 
     if args.list:
         do_list()
+        return
+
+    if args.edit:
+        ed = os.environ.get('EDITOR', 'vi')
+        print 'using',ed
+        os.system(ed+' '+TUNL_CONFIG)
         return
 
     try:

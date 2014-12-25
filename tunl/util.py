@@ -22,11 +22,6 @@ def require_tunnel(config, nick):
         err = err.format(nick, config.keys())
         die(err)
 
-#def qlocal(*args, **kargs):
-#    from fabric.api import quiet, local
-#    with quiet():
-#        return local(*args, **kargs)
-
 def qlocal(cmd):
     import os
     os.system(cmd)

@@ -2,10 +2,12 @@
 """
 import demjson
 
-from .util import report, require_tunnel, load_config, qlocal, die
-from .data import TUNL_DIR, SYSTEM_USER, TUNL_CONFIG
-from .python import opj, ope
-from .schema import Entry
+#from tunl.util import report, require_tunnel, load_config, qlocal, die
+from tunl import util
+from tunl.util import report, require_tunnel, qlocal, die
+from tunl.data import TUNL_DIR, SYSTEM_USER, TUNL_CONFIG
+from tunl.python import opj, ope
+from tunl.schema import Entry
 
 def get_socket(nick):
     """ """
@@ -17,7 +19,7 @@ def get_user(tunnel):
 
 def get_tunnel(nick):
     """ """
-    config = load_config()
+    config = util.load_config()
     require_tunnel(config, nick)
     return config[nick]
 
@@ -29,7 +31,7 @@ def do_status(nick, api=False):
 
 def do_list(api=False):
     """ """
-    config = load_config()
+    config = util.load_config()
     for nick in config:
         config[nick].update(status=do_status(nick))
     if api:
@@ -38,12 +40,12 @@ def do_list(api=False):
         report("")
         for t in config:
             print '  {0}: '.format(t)
-            for x,y in config[t].items():
+            for x, y in config[t].items():
                 print '    {0}: {1}'.format(x,y)
 
 def do_add(nick='', data={}, api=False, force=False):
     """ """
-    config = load_config()
+    config = util.load_config()
     assert isinstance(nick, basestring) and nick
 
     if isinstance(data, basestring):

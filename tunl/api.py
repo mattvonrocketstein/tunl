@@ -5,11 +5,12 @@ from tunl import actions
 def gen_method(name):
     def newf(*args, **kargs):
         assert 'api' not in kargs
-        kargs.update(api=True)#
-        fxn = getattr(actions,name)
+        kargs.update(api=True)
+        fxn = getattr(actions, name)
         return fxn(*args, **kargs)
     return newf
 
+list_tunnels = gen_method('do_list')
 stop_tunnel = gen_method('do_stop')
 start_tunnel = gen_method('do_start')
 add_tunnel = gen_method('do_add')

@@ -1,1 +1,3 @@
-# requirements.txt for py_pkg
+# requirements.txt for tunl
+#
+reporting==0.32

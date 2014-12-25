@@ -11,7 +11,7 @@ if not os.getcwd()==this_dir:
     os.chdir(this_dir)
 
 # make sure we can import the version number so that it doesn't have
-# to be changed in two places. tunnelrat/__init__.py is also free
+# to be changed in two places. tunl/__init__.py is also free
 # to import various requirements that haven't been installed yet
 sys.path.append(os.path.join(this_dir, 'tunl'))
 from version import __version__
@@ -23,10 +23,6 @@ install_requires = [
     'argparse',
     'demjson',
     'voluptuous',
-    'reporting>=0.31',
-    # i hate you setup.py
-    # this is already specified by reporting.
-    # why do i have to write it again here??
     'pygments', ]
 
 setup(
@@ -36,7 +32,7 @@ setup(
     author       = 'mattvonrocketstein',
     author_email = '$author@gmail',
     url          = base_url,
-    download_url = base_url+'/tarball/master',
+    download_url = base_url + '/tarball/master',
     packages     = ['tunl'],
     keywords     = ['ssh','tunnel','manager'],
     entry_points = {

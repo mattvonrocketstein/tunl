@@ -61,5 +61,21 @@ To list all tunnel information and status:
 tunl --list
 ```
 
+To edit tunnel config with $EDITOR:
+
+```shell
+tunl --edit
+```
+
+
 <a name="testing">TESTING</a>
 =============================
+
+```shell
+  $ virtualenv venv_tunl
+  $ source venv_tunl/bin/activate
+  $ pip install -r requirements.txt
+  $ python setup.py install
+  $ pip install tox
+  $ tox
+```

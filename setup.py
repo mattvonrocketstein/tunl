@@ -24,7 +24,7 @@ install_requires = [
     'demjson',
     'voluptuous',
     'pygments', ]
-description = ('lightweight shh tunnel management utility.  '
+description = ('lightweight ssh tunnel management utility.  '
                'supports command-line and programmatic usage')
 
 setup(

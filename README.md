@@ -10,7 +10,8 @@ Tunl is a dead-simple tunnel manager.  I wrote this mainly because I wanted both
 
 ```shell
   $ git clone https://github.com/mattvonrocketstein/tunl.git
-  $ step2
+  $ pip install -r requirements.txt
+  $ python setup.py install
 ```
 
 <a name="config">Configuration</a>

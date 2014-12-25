@@ -44,7 +44,11 @@ def parse_argv():
         do_list()
         return
 
-    nick = unknown[0]
+    try:
+        nick = unknown[0]
+    except IndexError:
+        do_list()
+        return
     if args.start:
         do_start(nick)
     elif args.add:

@@ -24,11 +24,13 @@ install_requires = [
     'demjson',
     'voluptuous',
     'pygments', ]
+description = ('lightweight shh tunnel management utility.  '
+               'supports command-line and programmatic usage')
 
 setup(
     name         = 'tunl',
     version      = __version__,
-    description  = '',
+    description  = description,
     author       = 'mattvonrocketstein',
     author_email = '$author@gmail',
     url          = base_url,

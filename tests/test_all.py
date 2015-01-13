@@ -54,7 +54,7 @@ thisdir = os.path.dirname(__file__)
 class TestTunl(TestCase):
 
     def test_ensure_config(self):
-        tunl_dir = tempfile.mkdtemp()
+        tunl_dir = os.path.join(tempfile.gettempdir(), 'tunl_utest')
         tunl_config = os.path.join(tunl_dir, 'tmpfile.json')
         try:
             with patch('tunl.TUNL_DIR', tunl_dir):

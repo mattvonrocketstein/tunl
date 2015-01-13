@@ -10,7 +10,7 @@ def gen_method(name):
         return fxn(*args, **kargs)
     return newf
 
-list_tunnels = gen_method('do_list')
-stop_tunnel = gen_method('do_stop')
-start_tunnel = gen_method('do_start')
-add_tunnel = gen_method('do_add')
+list_tunnels = list = gen_method('do_list')
+stop_tunnel = stop = gen_method('do_stop')
+start_tunnel = start = gen_method('do_start')
+add_tunnel = add = gen_method('do_add')

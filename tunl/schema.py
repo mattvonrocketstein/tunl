@@ -4,6 +4,7 @@
 from voluptuous import Schema
 from voluptuous import Required, Invalid
 from voluptuous import Optional
+
 Entry = Schema({
     Required("remote_host") : basestring,
     Required("remote_port") : int,

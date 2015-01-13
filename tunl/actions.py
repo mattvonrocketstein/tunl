@@ -2,7 +2,6 @@
 """
 import demjson
 
-#from tunl.util import report, require_tunnel, load_config, qlocal, die
 from tunl import util
 from tunl.util import report, require_tunnel, qlocal, die
 from tunl.data import TUNL_DIR, SYSTEM_USER, TUNL_CONFIG
@@ -15,12 +14,12 @@ def get_socket(nick):
 
 def get_user(tunnel):
     """ """
-    return tunnel.get('user',SYSTEM_USER)
+    return tunnel.get('user', SYSTEM_USER)
 
-def get_tunnel(nick):
+def get_tunnel(nick, api=False):
     """ """
     config = util.load_config()
-    require_tunnel(config, nick)
+    require_tunnel(config, nick, api=api)
     return config[nick]
 
 def do_status(nick, api=False):
@@ -47,7 +46,6 @@ def do_add(nick='', data={}, api=False, force=False):
     """ """
     config = util.load_config()
     assert isinstance(nick, basestring) and nick
-
     if isinstance(data, basestring):
         data = demjson.decode(data)
     assert isinstance(data, dict) and data
@@ -61,7 +59,7 @@ def do_add(nick='', data={}, api=False, force=False):
     Entry(data)
     config[nick] = data
     config = demjson.encode(config, compactly=False)
-    with open(TUNL_CONFIG,'w') as fhandle:
+    with open(TUNL_CONFIG, 'w') as fhandle:
         fhandle.write(config)
     if not api:
         report("rewrote config: ")
@@ -88,7 +86,7 @@ def do_start(nick, api=False):
 
 def do_stop(nick, api=False):
     """ stops the tunnel created by do_start() """
-    tunnel = get_tunnel(nick)
+    tunnel = get_tunnel(nick, api=api)
     tunnel_user = get_user(tunnel)
     socket_file = get_socket(nick)
     if not ope(socket_file):

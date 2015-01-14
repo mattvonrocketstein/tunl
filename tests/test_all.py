@@ -4,6 +4,9 @@ import os, sys
 from unittest import TestCase
 from mock import patch
 
+from voluptuous import MultipleInvalid
+import demjson
+
 from tunl import api
 from tunl import actions
 from tunl import util
@@ -50,25 +53,36 @@ from tunl import data
 from tunl import ensure_config
 thisdir = os.path.dirname(__file__)
 
-@patch('tunl.util.load_config', lambda *args, **kargs: FAKE_CONFIG)
+#@patch('tunl.util.load_config', lambda *args, **kargs: FAKE_CONFIG)
 class TestTunl(TestCase):
 
     def test_ensure_config(self):
-        tunl_dir = os.path.join(tempfile.gettempdir(), 'tunl_utest')
-        tunl_config = os.path.join(tunl_dir, 'tmpfile.json')
-        try:
-            with patch('tunl.TUNL_DIR', tunl_dir):
-                with patch('tunl.TUNL_CONFIG', tunl_config):
-                    ensure_config()
-            self.assertTrue(os.path.exists(tunl_config))
-            self.assertTrue(os.path.exists(tunl_dir))
 
-        finally:
-            shutil.rmtree(tunl_dir)
-        #self.assertEqual(data.TUNL_DIR, thatdir)
+        with patch('tunl.TUNL_DIR', self.tunl_dir):
+            with patch('tunl.TUNL_CONFIG', self.tunl_config):
+                ensure_config()
+        self.assertTrue(os.path.exists(self.tunl_config))
+        self.assertTrue(os.path.exists(self.tunl_dir))
+
+    def test_add(self):
+        raise Exception,load_config()
+        with patch('tunl.actions.TUNL_DIR', self.tunl_dir):
+            with patch('tunl.actions.TUNL_CONFIG', self.tunl_config):
+                self.assertRaises(
+                    MultipleInvalid,
+                    lambda: api.add('wrong',data=dict(one=1)))
+                api.add("test_tunnel_name",
+                        FAKE_CONFIG["test_tunnel_name"])
 
     def setUp(self):
-        pass
+        self.tunl_dir = os.path.join(tempfile.gettempdir(), 'tunl_utest')
+        self.tunl_config = os.path.join(self.tunl_dir, 'tmpfile.json')
+        def cleanup():
+            try:
+                shutil.rmtree(self.tunl_dir)
+            except OSError:
+                pass
+        self.addCleanup(cleanup)
 
 
     def tearDown(self):
@@ -99,8 +113,6 @@ class TestTunl(TestCase):
 
     def test_schema_validator(self):
         from tunl.schema import TunlSchema
-        from voluptuous import MultipleInvalid
-        import demjson
 
         TunlSchema()({
             "test_tunnel_name" : {

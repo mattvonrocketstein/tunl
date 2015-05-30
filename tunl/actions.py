@@ -1,5 +1,6 @@
 """ tunl.actions
 """
+import os
 import demjson
 
 from tunl import util
@@ -69,17 +70,28 @@ def do_add(nick='', data={}, api=False, force=False):
 def do_start(nick, api=False):
     """ """
     tunnel = get_tunnel(nick)
+    ident = tunnel.get('key','')
+    if ident:
+        ident = os.path.expanduser(ident)
+        if not os.path.exists(ident):
+            err="Key specified for tunnel {0} does not exist: {1}"
+            err = err.format(nick, ident)
+            raise SystemExit(err)
+        ident = '-i "{0}"'.format(ident)
     report.start(nick)
     socket_file = get_socket(nick)
     if ope(socket_file):
         report.start("socket already exists")
         return False
-    connect_cmd_t = 'ssh -M -S {0} -fnNT -L {1}:localhost:{2} {3}@{4}'
+    connect_cmd_t = 'ssh {ident} -M -S {sock} -fnNT -L {local_port}:localhost:{remote_port} {user}@{host}'
     user = get_user(tunnel)
     connect_cmd = connect_cmd_t.format(
-        socket_file, tunnel['local_port'], tunnel['remote_port'],
-        user,
-        tunnel['remote_host'])
+        ident=ident,
+        sock=socket_file,
+        local_port=tunnel['local_port'],
+        remote_port=tunnel['remote_port'],
+        user=user,
+        host=tunnel['remote_host'])
     report(connect_cmd)
     print qlocal(connect_cmd)
     return True

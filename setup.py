@@ -22,8 +22,11 @@ base_url = 'https://github.com/mattvonrocketstein/tunl/'
 install_requires = [
     'argparse',
     'demjson',
+    'pygments',
+    'reporting',
     'voluptuous',
-    'pygments', ]
+    ]
+
 description = ('lightweight shh tunnel management utility.  '
                'supports command-line and programmatic usage')
 

@@ -10,6 +10,7 @@ Entry = Schema({
     Required("remote_port") : int,
     Required("local_port")  : int,
     Optional("user")        : basestring,
+    Optional("key")         : basestring,
     })
 
 class TunlSchema(Schema):

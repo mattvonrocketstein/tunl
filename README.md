@@ -16,21 +16,22 @@ Tunl is a dead-simple tunnel manager.  I wrote this mainly because I wanted both
 
 <a name="config">Configuration</a>
 ==================================
-Configuration is stored in `~/.tunl/config.json`, which is created if it does not exist already.  The format is basically `{tunnel_name : tunnel_info}`.  For the tunnel info `remote_host`, `remote_port` and `local_port` are required but `user` is optional and defaults to the current user.  See the example below.
+Configuration is stored in `~/.tunl/config.json`, which is created if it does not exist already.  The format is basically `{tunnel_name : {..tunnel_info..}, .. }`.  For the tunnel info, the keys `remote_host`, `remote_port` and `local_port` are required but `user` is optional and defaults to the current user.  Another optional See the example below.
 
 ```json
 {
-  "mongo" : {
-      "local_port" : 27000,
-      "remote_host" : "some.remote.host.org",
-      "remote_port" : 27017,
-      "user" : "matt"
-    },
-  "tunnel_name" : {
+  "my_simple_tunnel" : {
       "local_port" : 123,
       "remote_host" : "remote_host",
       "remote_port" : 123
     }
+  "another_more_complex_tunnel" : {
+      "local_port" : 27000,
+      "remote_host" : "some.remote.host.org",
+      "remote_port" : 27017,
+      "user" : "some_guy",
+      "key"  : "some_path_to_ssh_key.pem",
+    },
 }
 ```
 

@@ -1,0 +1,6 @@
+#
+# doc-build requirements
+#
+-r ../requirements.txt
+epydoc==3.0.1
+mkdocs==0.14.0

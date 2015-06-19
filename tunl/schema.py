@@ -12,25 +12,15 @@ Entry = Schema({
     Optional("user")        : basestring,
     Optional("key")         : basestring,
     })
+TunlEntry=Entry
 
-class TunlSchema(Schema):
-    """
-    // example configuration for tunl
-    {
-      'tunnel_nickname': {
-        'local_port'   : 0,
-        'remote_port'  : 0,
-        'remote_host'  : 'example_host',
-        'user' : 'optional_user'
-      }
-    }
-    """
-    def config_validator(self, x):
-        x = x.copy()
-        for k, v in x.items():
-            if not isinstance(k, basestring):
-                raise Invalid("{0} is not a string".format(k))
-            Entry(v)
-
-    def __init__(self):
-        super(TunlSchema, self).__init__(self.config_validator)
+DEFAULT_DATA = """// example configuration for tunl
+{
+'tunnel_nickname': {
+    'local_port'   : 0,
+    'remote_port'  : 0,
+    'remote_host'  : 'example_host',
+    'user' : 'optional_user' },
+}
+"""
+TunlSchema = Schema({basestring:Entry})

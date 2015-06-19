@@ -11,7 +11,7 @@ from tunl import api
 from tunl import actions
 from tunl import util
 from tunl.parsing import get_parser
-
+from tunl.schema import TunlSchema
 FAKE_CONFIG = {
   "test_tunnel_name" : {
       "local_port" : 1234,
@@ -56,24 +56,6 @@ thisdir = os.path.dirname(__file__)
 #@patch('tunl.util.load_config', lambda *args, **kargs: FAKE_CONFIG)
 class TestTunl(TestCase):
 
-    def test_ensure_config(self):
-
-        with patch('tunl.TUNL_DIR', self.tunl_dir):
-            with patch('tunl.TUNL_CONFIG', self.tunl_config):
-                ensure_config()
-        self.assertTrue(os.path.exists(self.tunl_config))
-        self.assertTrue(os.path.exists(self.tunl_dir))
-
-    def test_add(self):
-        raise Exception,load_config()
-        with patch('tunl.actions.TUNL_DIR', self.tunl_dir):
-            with patch('tunl.actions.TUNL_CONFIG', self.tunl_config):
-                self.assertRaises(
-                    MultipleInvalid,
-                    lambda: api.add('wrong',data=dict(one=1)))
-                api.add("test_tunnel_name",
-                        FAKE_CONFIG["test_tunnel_name"])
-
     def setUp(self):
         self.tunl_dir = os.path.join(tempfile.gettempdir(), 'tunl_utest')
         self.tunl_config = os.path.join(self.tunl_dir, 'tmpfile.json')
@@ -103,18 +85,8 @@ class TestTunl(TestCase):
         # much to do.  just make sure the import isn't broken
         exec('from tunl.data import *')
 
-    def test_cl_parser(self):
-        parser = get_parser()
-        self.assertEqual(
-            set(parser._option_string_actions.keys()),
-            set(('-h -l --add --list --start --status'
-                 ' --edit --verbose --help -v --stop').split()))
-
-
     def test_schema_validator(self):
-        from tunl.schema import TunlSchema
-
-        TunlSchema()({
+        TunlSchema({
             "test_tunnel_name" : {
                 "local_port" : 1234,
                 "remote_host" : "test_remote_host",
@@ -123,7 +95,7 @@ class TestTunl(TestCase):
             })
         self.assertRaises(
             MultipleInvalid,
-            lambda: TunlSchema()({
+            lambda: TunlSchema({
                 "test_tunnel_name" : {
                     "local_prot" : 1234,
                     "remote_hsot" : "test_remote_host",

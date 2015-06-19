@@ -1,32 +1,20 @@
 USAGE
 =====
 
-To add a new tunnel:
+| command | description |
+|---------|-------------|
+| `tunl edit`    | edit ~/.tunl/config using $EDITOR |
+| `tunl version` | show `tunl` version information |
+| `tunl help`    | show CLI help |
+| `tunl --help`    | show CLI help |
+| `tunl list` | list all known tunnel information |
+| `tunl status` | show status info for all tunnels |
+| `tunl status TUNNEL_NAME` | show status info for named tunnel |
+| `tunl start TUNNEL_NAME` | start named tunnel |
+| `tunl stop TUNNEL_NAME` | stop named tunnel |
+
+To add a new tunnel with the given name and data to ~/.tunl configuration try something like this:
 
 ```shell
-tunl tunnel_name --add "{remote_host:'remote_host', remote_port:123, local_port:123,}"
-```
-To start/stop a tunnel:
-
-```shell
-tunl tunnel_name --start
-tunl tunnel_name --stop
-```
-
-To show tunnel status:
-
-```shell
-tunl tunnel_name --status
-```
-
-To list all tunnel information and status:
-
-```shell
-tunl --list
-```
-
-To edit tunnel config with $EDITOR:
-
-```shell
-tunl --edit
+tunl add TUNNEL_NAME --data "{remote_host:'remote_host', remote_port:123, local_port:123,}"`
 ```

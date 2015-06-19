@@ -2,7 +2,7 @@
 """ setup.py for tunl
 """
 import os, sys
-from setuptools import setup
+from setuptools import setup, find_packages
 
 # make sure that finding packages works, even
 # when setup.py is invoked from outside this dir
@@ -27,9 +27,9 @@ install_requires = [
     'voluptuous',
     ]
 
+packages = [x for x in find_packages() if x not in ['tests']]
 description = ('lightweight shh tunnel management utility.  '
                'supports command-line and programmatic usage')
-
 setup(
     name         = 'tunl',
     version      = __version__,
@@ -38,7 +38,7 @@ setup(
     author_email = '$author@gmail',
     url          = base_url,
     download_url = base_url + '/tarball/master',
-    packages     = ['tunl'],
+    packages     = packages,
     keywords     = ['ssh','tunnel','manager'],
     entry_points = {
         'console_scripts': \

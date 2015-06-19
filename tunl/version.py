@@ -2,4 +2,4 @@
 
 """
 
-__version__ = version = 0.15
+__version__ = version = 0.16

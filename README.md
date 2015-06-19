@@ -1,15 +1,23 @@
-ABOUT
-=====
-Tunl is a dead-simple tunnel manager.  I wrote this mainly because I wanted both command-line and programmatic access to a ssh-tunnel manager with simple configuration files.  Also I can't be bothered to remember the difficult command line syntax, and I hate typing.
+## About tunl
 
-INSTALLATION
-=======================================
+Tunl is a ssh-tunnel manager without a lot of frills.  It has a command-line interface which works any place you have ssh and python.  I wrote this mainly because I wanted dead simple command-line and programmatic access to a ssh-tunnel manager with unsurprising configuration files.  (Also I can't be bothered to remember the ssh command line syntax, and I sure do hate typing)
+
+[The main documentation is located here.](http://mattvonrocketstein.github.io/tunl/)
+
+## Installing tunl
+
+Install with pypi:
+
+```shell
+   $ pip install tunl
+```
+
+Or try the bleeding edge:
 
 ```shell
    $ git clone https://github.com/mattvonrocketstein/tunl.git
    $ cd tunl
    $ virtualenv venv
    $ source venv/bin/activate
-   $ pip install -r requirements.txt
    $ python setup.py develop
 ```

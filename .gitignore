@@ -7,5 +7,9 @@ node/*
 build
 *.egg-info
 dist
-venv_*/*
+venv*/*
 .coverage
+docs/api
+docs/docs/api
+docs/glsh
+docs/site

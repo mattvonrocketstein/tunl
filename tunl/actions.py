@@ -34,17 +34,19 @@ def _tunnel_status_helper(nick, api=False):
         report(status)
     return status
 
-def do_status(nick, api=False):
-    if not nick or nick=='all':
-        # no argument implies retrieving status for each tunnel
-        result = util.load_config().copy()
-        for nick in result:
-            result[nick] = _tunnel_status_helper(nick, api=True)
+def do_status(nicks, api=False):
+    all_nicks = util.load_config().copy()
+    if not nicks or nicks == ['all']:
+        nicks = all_nicks
     else:
-        result = {nick : _tunnel_status_helper(nick, api=api)}
+        nicks = { k: all_nicks[k] for k in nicks }
+
+    result = {}
+    for n in nicks.keys():
+        result[n] = _tunnel_status_helper(n, api=True)
     if not api:
-        for nick,status in result.items():
-            report("{0}: {1}".format(nick,status))
+        for nicks,status in result.items():
+            report("{0}: {1}".format(nicks,status))
     return result
 
 def do_list(api=False):
@@ -86,49 +88,55 @@ def do_add(nick='', data={}, api=False, force=False):
         print config
     return config
 
-def do_start(nick, api=False):
+def do_start(nicks, api=False):
     """ starts the named tunnel"""
-    tunnel = get_tunnel(nick)
-    ident = tunnel.get('key', '')
-    if ident:
-        ident = os.path.expanduser(ident)
-        if not os.path.exists(ident):
-            err = "Key specified for tunnel {0} does not exist: {1}"
-            err = err.format(nick, ident)
-            raise SystemExit(err)
-        ident = '-i "{0}"'.format(ident)
-    report.start(nick)
-    socket_file = get_socket(nick)
-    if ope(socket_file):
-        report.start("socket already exists")
-        return False
-    user = get_user(tunnel)
-    connect_cmd = CONNECT_CMD_T.format(
-        ident=ident,
-        sock=socket_file,
-        local_port=tunnel['local_port'],
-        remote_port=tunnel['remote_port'],
-        user=user,
-        host=tunnel['remote_host'])
-    report(connect_cmd)
-    print qlocal(connect_cmd)
+    if not nicks or nicks == ['all']:
+        nicks = util.load_config().copy()
+    for nick in nicks:
+        tunnel = get_tunnel(nick)
+        ident = tunnel.get('key', '')
+        if ident:
+            ident = os.path.expanduser(ident)
+            if not os.path.exists(ident):
+                err = "Key specified for tunnel {0} does not exist: {1}"
+                err = err.format(nick, ident)
+                raise SystemExit(err)
+            ident = '-i "{0}"'.format(ident)
+        report.start(nick)
+        socket_file = get_socket(nick)
+        if ope(socket_file):
+            report.start("socket already exists")
+            return False
+        user = get_user(tunnel)
+        connect_cmd = CONNECT_CMD_T.format(
+            ident=ident,
+            sock=socket_file,
+            local_port=tunnel['local_port'],
+            remote_port=tunnel['remote_port'],
+            user=user,
+            host=tunnel['remote_host'])
+        report(connect_cmd)
+        print qlocal(connect_cmd)
     return True
 
-def do_stop(nick, api=False):
+def do_stop(nicks, api=False):
     """ stops a named tunnel which was created by do_start()
 
         returns True if shutdown was successful,
 
         return False if shutdown failed or if shutdown was unnecessary.
     """
-    tunnel = get_tunnel(nick, api=api)
-    tunnel_user = get_user(tunnel)
-    socket_file = get_socket(nick)
-    if not ope(socket_file):
-        report("no socket file found.  probably the tunnel is down already")
-        return False
-    shutdown_cmd_t = 'ssh -S {0} -O exit {1}'
-    shutdown_cmd = shutdown_cmd_t.format(socket_file, tunnel_user)
-    report(shutdown_cmd)
-    qlocal(shutdown_cmd)
+    if not nicks or nicks == ['all']:
+        nicks = util.load_config().copy()
+    for nick in nicks:
+        tunnel = get_tunnel(nick, api=api)
+        tunnel_user = get_user(tunnel)
+        socket_file = get_socket(nick)
+        if not ope(socket_file):
+            report("no socket file found.  probably the tunnel is down already")
+            return False
+        shutdown_cmd_t = 'ssh -S {0} -O exit {1}'
+        shutdown_cmd = shutdown_cmd_t.format(socket_file, tunnel_user)
+        report(shutdown_cmd)
+        qlocal(shutdown_cmd)
     return True

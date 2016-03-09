@@ -9,9 +9,11 @@ USAGE
 | `tunl --help`    | show CLI help |
 | `tunl list` | list all known tunnel information |
 | `tunl status` | show status info for all tunnels |
-| `tunl status TUNNEL_NAME` | show status info for named tunnel |
-| `tunl start TUNNEL_NAME` | start named tunnel |
-| `tunl stop TUNNEL_NAME` | stop named tunnel |
+| `tunl start` | start all tunnels |
+| `tunl stop` | stop all tunnels |
+| `tunl status TUNNEL_NAME ...` | show status info for named tunnel(s) |
+| `tunl start TUNNEL_NAME ...` | start named tunnel(s) |
+| `tunl stop TUNNEL_NAME ...` | stop named tunnel(s) |
 
 To add a new tunnel with the given name and data to ~/.tunl configuration try something like this:
 

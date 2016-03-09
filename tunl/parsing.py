@@ -35,8 +35,8 @@ def get_parser():
         'status', help='show tunnel status information')
     status_parser.set_defaults(subcommand='status')
     status_parser.add_argument(
-        'tunnel_name', nargs='?', default='',
-        help=("status for the named tunnel"))
+        'tunnel_name', nargs='*', default='',
+        help=("status for the named tunnel(s)"))
 
     edit_parser = subparsers.add_parser(
         'edit', help='edit tunl config')
@@ -46,15 +46,15 @@ def get_parser():
         'start', help='start the named tunnel')
     start_parser.set_defaults(subcommand='start')
     start_parser.add_argument(
-        'tunnel_name', default=os.getcwd(),
-        help=("start the named tunnel"))
+        'tunnel_name', nargs='*', default='',
+        help=("start the named tunnel(s)"))
 
     stop_parser = subparsers.add_parser(
         'stop', help='stop the named tunnel')
     stop_parser.set_defaults(subcommand='stop')
     stop_parser.add_argument(
-        'tunnel_name', default=os.getcwd(),
-        help=("stop the named tunnel"))
+        'tunnel_name', nargs='*', default='',
+        help=("stop the named tunnel(s)"))
     add_parser = subparsers.add_parser(
         'add', help='add new tunnel to configuration')
     add_parser.set_defaults(subcommand='add')

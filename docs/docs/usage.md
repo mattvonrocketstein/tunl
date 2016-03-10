@@ -13,7 +13,7 @@ USAGE
 | `tunl start TUNNEL_NAME` | start named tunnel |
 | `tunl stop TUNNEL_NAME` | stop named tunnel |
 
-To add a new tunnel with the given name and data to ~/.tunl configuration try something like this:
+To add a new tunnel with the given name and data to ~/.config/tunl configuration try something like this:
 
 ```shell
 tunl add TUNNEL_NAME --data "{remote_host:'remote_host', remote_port:123, local_port:123,}"`

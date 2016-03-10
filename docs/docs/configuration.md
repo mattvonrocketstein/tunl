@@ -1,7 +1,7 @@
 Configuration
 =============
 
-Configuration is stored in `~/.tunl/config.json`, which is created if it does not exist already.
+Configuration is stored in `~/.config/tunl/config.json`, which is created if it does not exist already.
 
 The format is basically `{tunnel_name : {..tunnel_info..}, .. }` (see the full example below).
 

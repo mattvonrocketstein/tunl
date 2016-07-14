@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
 """ tunl/tests/test_all
 """
-import os, sys
+import os
+import sys
 from unittest import TestCase
 from mock import patch
 
@@ -12,17 +14,20 @@ from tunl import actions
 from tunl import util
 from tunl.parsing import get_parser
 from tunl.schema import TunlSchema
+
 FAKE_CONFIG = {
-  "test_tunnel_name" : {
-      "local_port" : 1234,
-      "remote_host" : "test_remote_host",
-      "remote_port" : 4321
+    "test_tunnel_name": {
+        "local_port": 1234,
+        "remote_host": "test_remote_host",
+        "remote_port": 4321
     }
 }
+
 
 @patch('tunl.util.load_config', lambda *args, **kargs: FAKE_CONFIG)
 @patch('os.system', lambda *args, **kargs: None)
 class TestAPI(TestCase):
+
     def test_api_list(self):
         self.assertEqual(api.list_tunnels(), FAKE_CONFIG)
 
@@ -48,17 +53,21 @@ class TestAPI(TestCase):
             actions.get_tunnel('test_tunnel_name', api=True))
 
 import tunl
-import tempfile, shutil
+import tempfile
+import shutil
 from tunl import data
-from tunl import ensure_config
+from tunl import util
 thisdir = os.path.dirname(__file__)
 
 #@patch('tunl.util.load_config', lambda *args, **kargs: FAKE_CONFIG)
+
+
 class TestTunl(TestCase):
 
     def setUp(self):
         self.tunl_dir = os.path.join(tempfile.gettempdir(), 'tunl_utest')
         self.tunl_config = os.path.join(self.tunl_dir, 'tmpfile.json')
+
         def cleanup():
             try:
                 shutil.rmtree(self.tunl_dir)
@@ -66,10 +75,8 @@ class TestTunl(TestCase):
                 pass
         self.addCleanup(cleanup)
 
-
     def tearDown(self):
         pass
-
 
     def test_version(self):
         from tunl.version import __version__
@@ -87,28 +94,28 @@ class TestTunl(TestCase):
 
     def test_schema_validator(self):
         TunlSchema({
-            "test_tunnel_name" : {
-                "local_port" : 1234,
-                "remote_host" : "test_remote_host",
-                "remote_port" : 4321
-                }
-            })
+            "test_tunnel_name": {
+                "local_port": 1234,
+                "remote_host": "test_remote_host",
+                "remote_port": 4321
+            }
+        })
         self.assertRaises(
             MultipleInvalid,
             lambda: TunlSchema({
-                "test_tunnel_name" : {
-                    "local_prot" : 1234,
-                    "remote_hsot" : "test_remote_host",
-                    "remote_port" : 4321
-                    }
-                }))
+                "test_tunnel_name": {
+                    "local_prot": 1234,
+                    "remote_hsot": "test_remote_host",
+                    "remote_port": 4321
+                }
+            }))
 
-    def asdtest_myoutput(self, capsys): # or use "capfd" for fd-level
+    def asdtest_myoutput(self, capsys):  # or use "capfd" for fd-level
         print ("hello")
         sys.stderr.write("world\n")
         out, err = capsys.readouterr()
-        self.assertEqual(out,"hello\n")
-        self.assertEqual(err , "world\n")
+        self.assertEqual(out, "hello\n")
+        self.assertEqual(err, "world\n")
         print "next"
         out, err = capsys.readouterr()
-        self.assertEqual( out , "next\n")
+        self.assertEqual(out, "next\n")

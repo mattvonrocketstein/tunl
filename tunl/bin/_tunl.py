@@ -1,11 +1,13 @@
+# -*- coding: utf-8 -*-
 """ tunl.bin._tunl
 """
-from tunl import ensure_config, parse_argv
+from tunl.util import ensure_config
+from tunl.parsing import parse_argv
+
 
 def main():
     ensure_config()
     parse_argv()
-entry = main
 
-if __name__=='__main__':
+if __name__ == '__main__':
     main()

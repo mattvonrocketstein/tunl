@@ -13,3 +13,5 @@ docs/api
 docs/docs/api
 docs/glsh
 docs/site
+tests/.cache
+.cache

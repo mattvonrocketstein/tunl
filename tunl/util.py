@@ -2,12 +2,14 @@
 """ tunl.util
 """
 import os
-import demjson
+from functools import wraps
 
+import demjson
 from report import Reporter
-from .schema import TunlSchema
-from .data import (
-    TUNL_CONFIG, TUNL_DIR, DEFAULT_DATA)
+
+from .schema import TunlSchema, DEFAULT_DATA
+from .data import TUNL_CONFIG, TUNL_DIR
+
 ope = os.path.exists
 report = Reporter("tunl")
 
@@ -18,10 +20,17 @@ class TunnelConfigurationError(ValueError):
 
 def load_config():
     """ """
-    ensure_config()
     with open(TUNL_CONFIG) as fhandle:
         data = demjson.decode(fhandle.read())
     return data
+
+
+def require_config(fxn):
+    @wraps(fxn)
+    def newf(*args, **kargs):
+        ensure_config()
+        return fxn(*args, **kargs)
+    return newf
 
 
 def die(msg):
@@ -47,11 +56,11 @@ def qlocal(cmd):
 
 
 def ensure_config():
-    if not ope(TUNL_DIR):
-        report("tDEFAULTunl config dir \"{0}\" does not exist, creating it".format(
+    if not os.path.exists(TUNL_DIR):
+        report("tunl config dir \"{0}\" does not exist, creating it".format(
             TUNL_DIR))
         os.mkdir(TUNL_DIR)
-    if not ope(TUNL_CONFIG):
+    if not os.path.exists(TUNL_CONFIG):
         report("tunl config \"{0}\" does not exist, creating it".format(
             TUNL_CONFIG))
         with open(TUNL_CONFIG, 'w') as fhandle:

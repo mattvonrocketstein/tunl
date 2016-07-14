@@ -9,15 +9,12 @@ from tunl.util import report, require_tunnel, qlocal, die
 from tunl.data import TUNL_DIR, SYSTEM_USER, TUNL_CONFIG
 from tunl.schema import Entry
 
-opj = os.path.join
-ope = os.path.exists
-
 CONNECT_CMD_T = 'ssh {ident} -M -S {sock} -fnNT -L {local_port}:localhost:{remote_port} {user}@{host}'
 
 
 def get_socket(nick):
     """ returns a path to the socketfile for the named tunnel """
-    return opj(TUNL_DIR, nick)
+    return os.path.join(TUNL_DIR, nick)
 
 
 def get_user(tunnel):
@@ -27,6 +24,7 @@ def get_user(tunnel):
     return tunnel.get('user', SYSTEM_USER)
 
 
+@util.require_config
 def get_tunnel(nick, api=False):
     """ """
     config = util.load_config()
@@ -36,12 +34,13 @@ def get_tunnel(nick, api=False):
 
 def _tunnel_status_helper(nick, api=False):
     assert nick
-    status = 'up' if ope(get_socket(nick)) else 'down'
+    status = 'up' if os.path.exists(get_socket(nick)) else 'down'
     if not api:
         report(status)
     return status
 
 
+@util.require_config
 def do_status(nick, api=False):
     if not nick or nick == 'all':
         # no argument implies retrieving status for each tunnel
@@ -56,9 +55,10 @@ def do_status(nick, api=False):
     return result
 
 
+@util.require_config
 def do_list(api=False):
     """ """
-    config = util.load_config().copy()
+    config = util.load_config()
     for nick in config:
         status = _tunnel_status_helper(nick, api=True)
         config[nick].update(status=status)
@@ -72,6 +72,7 @@ def do_list(api=False):
                 print '    {0}: {1}'.format(x, y)
 
 
+@util.require_config
 def do_add(nick='', data={}, api=False, force=False):
     """ """
     config = util.load_config()
@@ -110,7 +111,7 @@ def do_start(nick, api=False):
         ident = '-i "{0}"'.format(ident)
     report.start(nick)
     socket_file = get_socket(nick)
-    if ope(socket_file):
+    if os.path.exists(socket_file):
         report.start("socket already exists")
         return False
     user = get_user(tunnel)
@@ -136,7 +137,7 @@ def do_stop(nick, api=False):
     tunnel = get_tunnel(nick, api=api)
     tunnel_user = get_user(tunnel)
     socket_file = get_socket(nick)
-    if not ope(socket_file):
+    if not os.path.exists(socket_file):
         report("no socket file found.  probably the tunnel is down already")
         return False
     shutdown_cmd_t = 'ssh -S {0} -O exit {1}'

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """ tunl.actions
 """
 import os
@@ -6,14 +7,18 @@ import demjson
 from tunl import util
 from tunl.util import report, require_tunnel, qlocal, die
 from tunl.data import TUNL_DIR, SYSTEM_USER, TUNL_CONFIG
-from tunl.python import opj, ope
 from tunl.schema import Entry
 
+opj = os.path.join
+ope = os.path.exists
+
 CONNECT_CMD_T = 'ssh {ident} -M -S {sock} -fnNT -L {local_port}:localhost:{remote_port} {user}@{host}'
+
 
 def get_socket(nick):
     """ returns a path to the socketfile for the named tunnel """
     return opj(TUNL_DIR, nick)
+
 
 def get_user(tunnel):
     """ returns the user specified by the tunnel configuration,
@@ -21,11 +26,13 @@ def get_user(tunnel):
     """
     return tunnel.get('user', SYSTEM_USER)
 
+
 def get_tunnel(nick, api=False):
     """ """
     config = util.load_config()
     require_tunnel(config, nick, api=api)
     return config[nick]
+
 
 def _tunnel_status_helper(nick, api=False):
     assert nick
@@ -34,18 +41,20 @@ def _tunnel_status_helper(nick, api=False):
         report(status)
     return status
 
+
 def do_status(nick, api=False):
-    if not nick or nick=='all':
+    if not nick or nick == 'all':
         # no argument implies retrieving status for each tunnel
         result = util.load_config().copy()
         for nick in result:
             result[nick] = _tunnel_status_helper(nick, api=True)
     else:
-        result = {nick : _tunnel_status_helper(nick, api=api)}
+        result = {nick: _tunnel_status_helper(nick, api=api)}
     if not api:
-        for nick,status in result.items():
-            report("{0}: {1}".format(nick,status))
+        for nick, status in result.items():
+            report("{0}: {1}".format(nick, status))
     return result
+
 
 def do_list(api=False):
     """ """
@@ -60,7 +69,8 @@ def do_list(api=False):
         for t in config:
             print '  {0}: '.format(t)
             for x, y in config[t].items():
-                print '    {0}: {1}'.format(x,y)
+                print '    {0}: {1}'.format(x, y)
+
 
 def do_add(nick='', data={}, api=False, force=False):
     """ """
@@ -85,6 +95,7 @@ def do_add(nick='', data={}, api=False, force=False):
         report("rewrote config: ")
         print config
     return config
+
 
 def do_start(nick, api=False):
     """ starts the named tunnel"""
@@ -113,6 +124,7 @@ def do_start(nick, api=False):
     report(connect_cmd)
     print qlocal(connect_cmd)
     return True
+
 
 def do_stop(nick, api=False):
     """ stops a named tunnel which was created by do_start()

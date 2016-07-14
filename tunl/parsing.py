@@ -1,14 +1,17 @@
+# -*- coding: utf-8 -*-
 """ tunl.parsing
 """
-import os, sys
+import os
+import sys
 import demjson
 import argparse
 import voluptuous
 from report import console
 from .data import TUNL_CONFIG
-from .util import report, die
+from .util import report
 from .actions import do_list, do_start, do_stop, do_add, do_status
 from tunl import version
+
 
 def get_parser():
     descr = ''
@@ -67,7 +70,9 @@ def get_parser():
         help=("ports, host, and username information for the new tunnel"))
     return parser
 
-def parse_argv():
+
+def parse_argv():  # flake8: noqa
+    """ """
     parser = get_parser()
     args, unknown = parser.parse_known_args(sys.argv[1:])
     if args.subcommand in ['version', 'help']:
@@ -100,8 +105,9 @@ def parse_argv():
             raise SystemExit(err)
         try:
             data = demjson.decode(data)
-        except demjson.JSONDecodeError,e:
-            print "demjson.JSONDecodeError: " + str(e)
+        except demjson.JSONDecodeError as e:
+            err = "demjson.JSONDecodeError: " + str(e)
+            print err
             raise SystemExit(err)
         else:
             try:
@@ -109,7 +115,6 @@ def parse_argv():
             except voluptuous.Invalid, e:
                 print "voluptuous.Invalid: " + str(e)
                 raise SystemExit(err)
-
     else:
         err = 'unrecognized subcommand "{0}"'
         raise SystemExit(err.format(args.subcommand))

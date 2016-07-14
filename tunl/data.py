@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 """ tunl.data
 """
 import os
-from .python import opj
+opj = os.path.join
 
 HOME = os.environ['HOME']
 SYSTEM_USER = os.environ['USER']

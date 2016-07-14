@@ -41,9 +41,10 @@ def check_links(url='/tunl', proto='http', base_domain="localhost"):
         for link in links:
             print colors.red(link)
             with api.quiet():  # (hide="warn_only=True):
+                cmd = "find {0} -name *.md|xargs grep '{1}'"
                 z = api.local(
-                    "find {0} -name *.md|xargs grep '{1}'".format(
-                        DOC_ROOT, link), capture=True)
+                    cmd.format(DOC_ROOT, link),
+                    capture=True)
                 if z.succeeded:
                     print str(z)
                 else:
@@ -54,9 +55,7 @@ def check_links(url='/tunl', proto='http', base_domain="localhost"):
     base_url = 'http://{0}:'.format(base_domain)
     port = str((PORT if base_domain == 'localhost' else 80))
     url = base_url + port + url
-
-    def wipe_logfile():
-        api.local('rm -f "{0}"'.format(logfile))
+    wipe_logfile = lambda: api.local('rm -f "{0}"'.format(logfile))
     wipe_logfile()
     with api.settings(warn_only=True):
         api.local(
@@ -77,8 +76,12 @@ def check_links(url='/tunl', proto='http', base_domain="localhost"):
         print "no broken links found"
 
 
+def report(msg):
+    print colors.red(msg)
+
+
 def add_coverage(_dir=GEN_PATH):
-    print colors.red("adding coverage data")
+    report("adding coverage data")
     cdir = os.path.join(SRC_ROOT, 'htmlcov')
     if os.path.exists(cdir):
         api.local("cp -r {0} {1}".format(cdir, _dir))
@@ -119,14 +122,16 @@ def serve():
 def push():
     if os.path.exists(DEPLOY_PATH):
         with api.lcd(DEPLOY_PATH):
-            api.local("find . -type f|xargs git rm -f")
+            cmd = "find . -type f|"
+            cmd += "xargs --no-run-if-empty git rm -f"
+            api.local(cmd)
     api.local("mkdir -p {0}".format(DEPLOY_PATH))
     api.local(
         "cp -rfv {0} {1}".format(
             os.path.join(GEN_PATH, '*'),
             DEPLOY_PATH))
     with api.lcd(DEPLOY_PATH):
-        api.local("find . -type f|xargs git add")
+        api.local("find . -type f|xargs --no-run-if-empty git add")
         api.local("git commit . -m'publishing {0}'".format(PROJECT_NAME))
         api.local("git push")
 

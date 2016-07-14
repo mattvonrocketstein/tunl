@@ -1,0 +1,33 @@
+body { padding-top: 60px; }
+div.article { padding-top: 20px; }
+div.article h2 { padding-bottom: 10px; }
+
+div.highlight pre {
+  background-color: #efefef;
+  margin: 0 0 10px;
+}
+
+.attention, .caution, .danger, .error, .hint, .important, .note, .tip, .warning, div.admonition {
+    border: 1px solid black;
+    margin: 10px 0 0 20px;
+    padding: 5px;
+}
+
+.admonition-title {
+    font-weight: bold;
+}
+
+.well.small {
+        padding: 6px 6px 4px;
+}
+.td_operation {
+    white-space:nowrap;
+}
+
+.btn.xsmall {
+  padding: 1px 3px 1px;
+  font-size: 11px;
+}
+
+.summary * { display: inline; }
+.summary pre { display: none; }

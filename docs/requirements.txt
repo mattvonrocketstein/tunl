@@ -1,7 +1,6 @@
-#
-# doc-build requirements
-#
--r ../requirements.txt
-goulash
-epydoc==3.0.1
-mkdocs==0.14.0
+Markdown==2.6.6
+pelican==3.6.3
+littleworkers
+bs4
+html5lib
+Twisted==16.3.0

@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 """ tunl.version
 
 """
 
-__version__ = version = 0.16
+__version__ = 0.17

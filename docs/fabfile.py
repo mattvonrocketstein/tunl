@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
-from fabric import api
 import os
 import shutil
+import webbrowser
+
+from fabric import api
 from fabric import colors
 
-PORT = 8001
-PROJECT_NAME = 'tunl'
-DOC_ROOT = os.path.dirname(__file__)
+PORT = 8000
+# Assumes this documention is in src_root/docs/
+PROJECT_NAME = os.path.split(os.path.dirname(os.path.dirname(__file__)))[-1]
+DOC_ROOT = os.path.abspath(os.path.dirname(__file__))
 SRC_ROOT = os.path.dirname(DOC_ROOT)
-GEN_PATH = os.path.join(DOC_ROOT, 'tunl')
+GEN_PATH = os.path.join(DOC_ROOT, PROJECT_NAME)
 DEPLOY_PATH = "~/code/ghio/{0}".format(PROJECT_NAME)
 DEPLOY_PATH = os.path.expanduser(DEPLOY_PATH)
 
@@ -30,7 +33,6 @@ def check_links(url='/tunl', proto='http', base_domain="localhost"):
         "--output webcheck ")
     cmd = cmd + url
     api.local(cmd)
-    import webbrowser
     webbrowser.open("file://{0}/badlinks.html".format(
         os.path.join(os.path.dirname(__file__), 'webcheck/')))
     return
@@ -84,7 +86,9 @@ def add_coverage(_dir=GEN_PATH):
     report("adding coverage data")
     cdir = os.path.join(SRC_ROOT, 'htmlcov')
     if os.path.exists(cdir):
-        api.local("cp -r {0} {1}".format(cdir, _dir))
+        api.local("cp -rfv {0} {1}".format(cdir, _dir))
+    else:
+        report("coverage directory does not exist: {0}".format(cdir))
 
 
 def clean():
@@ -109,6 +113,7 @@ def rebuild():
 
 def regenerate():
     """Automatically regenerate site upon file modification"""
+    add_coverage()
     with api.lcd(os.path.dirname(__file__)):
         api.local('pelican -r -s pelicanconf.py -o {0}'.format(GEN_PATH))
 
@@ -149,9 +154,6 @@ def build_prod():
 
 def run():
     from littleworkers import Pool
-    commands = [
-        'fab regenerate',
-        'fab serve'
-    ]
-    lil = Pool(workers=2)
-    lil.run(commands)
+    commands = ['fab regenerate', 'fab serve']
+    pool = Pool(workers=2)
+    pool.run(commands)

@@ -1,10 +1,10 @@
 -   repo: git://github.com/pre-commit/pre-commit-hooks
-    sha: e306ff3b7d0d9a6fc7d128ef9ca2e0b6e6e76e8f
+    sha: 3fa02652357ff0dbb42b5bc78c673b7bc105fcf3
     hooks:
-    -   id: trailing-whitespace
     -   id: check-ast
     -   id: check-merge-conflict
     -   id: fix-encoding-pragma
     -   id: autopep8-wrapper
     -   id: flake8
-        args: [--config=tox.ini]
+        args:
+        - --config=tox.ini

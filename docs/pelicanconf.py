@@ -9,11 +9,12 @@ import sys
 
 sys.path.append(os.path.dirname(__file__))
 
-PORT = 8001
+PORT = 8000
 AUTHOR = u'mvr'
-SITENAME = 'tunl'
-
-SITEURL = 'http://localhost:{0}/tunl'.format(PORT)
+SITENAME = os.path.split(
+    os.path.dirname(os.path.dirname(
+        os.path.abspath(__file__))))[-1]
+SITEURL = 'http://localhost:{0}/{1}'.format(PORT, SITENAME)
 RELATIVE_URLS = False
 
 PATH = os.path.join(os.path.dirname(__file__), 'content')
@@ -23,7 +24,6 @@ THEME = "theme"
 STATIC_PATHS = ["images", 'js']
 DEFAULT_LANG = u'en'
 
-# Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
 CATEGORY_FEED_ATOM = None
 TRANSLATION_FEED_ATOM = None

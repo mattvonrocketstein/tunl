@@ -24,7 +24,16 @@ FAKE_CONFIG = {
 }
 
 
-@patch('tunl.util.load_config', lambda *args, **kargs: FAKE_CONFIG)
+def fake_loader(*args, **kargs):
+    return FAKE_CONFIG
+
+
+def NOOP(*args, **kargs):
+    pass
+
+
+@patch('tunl.util.load_config', fake_loader)
+@patch('tunl.util.ensure_config', NOOP)
 @patch('os.system', lambda *args, **kargs: None)
 class TestAPI(TestCase):
 

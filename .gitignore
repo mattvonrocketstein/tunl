@@ -15,3 +15,4 @@ docs/glsh
 docs/site
 tests/.cache
 .cache
+htmlcov

@@ -55,7 +55,10 @@ def qlocal(cmd):
     return os.system(cmd)
 
 
-def ensure_config():
+def ensure_config(force=False):
+    """ """
+    if ensure_config.config_ensured and not force:
+        return
     if not os.path.exists(TUNL_DIR):
         report("tunl config dir \"{0}\" does not exist, creating it".format(
             TUNL_DIR))
@@ -70,3 +73,5 @@ def ensure_config():
         data = load_config()
         TunlSchema(data)
         report("config found and validated: {0}".format(TUNL_CONFIG))
+    ensure_config.config_ensured = True
+ensure_config.config_ensured = False

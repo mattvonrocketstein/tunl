@@ -3,4 +3,4 @@ pelican==3.6.3
 littleworkers
 bs4
 html5lib
-Twisted==16.3.0
+Twisted==22.2.0
